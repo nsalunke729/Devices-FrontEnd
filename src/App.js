@@ -1,17 +1,20 @@
-import React, { useEffect, useState } from "react";
+﻿import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Container, Table, Spinner, Button, Row, Col } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import logo from "./logo.png";  // logo
+import { exportToCSV, exportToPDF } from "./FileSaver"; // Import functions
 
 const TabletList = () => {
+    const [darkMode, setDarkMode] = useState(false);
     const [tablets, setTablets] = useState([]); // State to store tablet data
     const [loading, setLoading] = useState(true); // State to manage loading spinner
 
     // This function fetches the tablet data from the server and updates the state
     const fetchTablets = () => {
         setLoading(true); // Set loading to true when data fetch starts
-        axios.get(`${process.env.REACT_APP_API_URL}/tablets`, { withCredentials: true })
+        //axios.get(`${process.env.REACT_APP_API_URL}/tablets`, { withCredentials: true }) // To connect with Express.js
+        axios.get(`http://localhost:8080/devices/tablets`, { withCredentials: true }) // To connect with Java Spring-Boot
             .then(response => {
                 setTablets(response.data); // Store fetched tablet data
                 setLoading(false); // Set loading to false once data is fetched
@@ -25,7 +28,8 @@ const TabletList = () => {
     // This function fetches all records (including tablets and others) from the server
     const fetchAllRecords = () => {
         setLoading(true); // Set loading to true when data fetch starts
-        axios.get(`${process.env.REACT_APP_API_URL}/all`, { withCredentials: true })
+        //axios.get(`${process.env.REACT_APP_API_URL}/all`, { withCredentials: true })
+        axios.get(`http://localhost:8080/devices/all`, { withCredentials: true })
             .then(response => {
                 setTablets(response.data); // Store all fetched records (tablets, etc.)
                 setLoading(false); // Set loading to false once data is fetched
@@ -38,7 +42,8 @@ const TabletList = () => {
 
     // This function triggers the server to fetch devices and add them to the database
     const fetchAndAddRecords = () => {
-        axios.get(`${process.env.REACT_APP_API_URL}/fetch-devices`, { withCredentials: true })
+        //axios.get(`${process.env.REACT_APP_API_URL}/fetch-devices`, { withCredentials: true })
+        axios.get(`http://localhost:8080/devices/fetch-devices`, { withCredentials: true })
             .then(() => {
                 console.log("Records successfully added to the database"); // Log success message
                 fetchTablets();  // Fetch updated tablet data after adding records
@@ -50,14 +55,16 @@ const TabletList = () => {
 
     // Fetch tablet data on initial render
     useEffect(() => {
+        document.body.classList.toggle("dark-mode", darkMode);
+        document.documentElement.setAttribute('data-bs-theme', darkMode ? 'dark' : 'light');
         fetchTablets(); // Initial fetch to display tablet data
-    }, []);
+    }, [darkMode]);
 
     // If loading, show a spinner
     if (loading) return <div className="text-center mt-5"><Spinner animation="border" variant="primary" /></div>;
 
     return (
-        <Container className="mt-4 custom-container">
+        <Container className={`mt-4 custom-container`}>
             {/* Company Logo and Title */}
             <Row className="mb-4 text-center">
                 <Col>
@@ -74,7 +81,9 @@ const TabletList = () => {
                     <Button variant="success" onClick={fetchAllRecords} size="lg" className="mx-2">Show All Devices</Button>
                 </Col>
             </Row>
-
+            <button onClick={() => setDarkMode(!darkMode)}>
+                {darkMode ? "☀️ Light Mode" : "🌙 Dark Mode"}
+            </button>
             {/* Displaying tablet devices in a table */}
             <Table striped bordered hover responsive className="custom-table">
                 <thead className="bg-primary text-white">
@@ -98,6 +107,10 @@ const TabletList = () => {
                     ))}
                 </tbody>
             </Table>
+            <div>
+                <button onClick={() => exportToCSV(tablets)}>📄 Export CSV</button>
+                <button onClick={() => exportToPDF(tablets)}>📜 Export PDF</button>
+            </div>
         </Container>
     );
 };
