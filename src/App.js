@@ -13,8 +13,7 @@ const TabletList = () => {
     // This function fetches the tablet data from the server and updates the state
     const fetchTablets = () => {
         setLoading(true); // Set loading to true when data fetch starts
-        //axios.get(`${process.env.REACT_APP_API_URL}/tablets`, { withCredentials: true }) // To connect with Express.js
-        axios.get(`http://localhost:8080/devices/tablets`, { withCredentials: true }) // To connect with Java Spring-Boot
+        axios.get(`${process.env.REACT_APP_API_URL}/tablets`, { withCredentials: true }) // To get tablets
             .then(response => {
                 setTablets(response.data); // Store fetched tablet data
                 setLoading(false); // Set loading to false once data is fetched
@@ -28,8 +27,7 @@ const TabletList = () => {
     // This function fetches all records (including tablets and others) from the server
     const fetchAllRecords = () => {
         setLoading(true); // Set loading to true when data fetch starts
-        //axios.get(`${process.env.REACT_APP_API_URL}/all`, { withCredentials: true })
-        axios.get(`http://localhost:8080/devices/all`, { withCredentials: true })
+        axios.get(`${process.env.REACT_APP_API_URL}/all`, { withCredentials: true }) // To get All Devices Data
             .then(response => {
                 setTablets(response.data); // Store all fetched records (tablets, etc.)
                 setLoading(false); // Set loading to false once data is fetched
@@ -42,8 +40,7 @@ const TabletList = () => {
 
     // This function triggers the server to fetch devices and add them to the database
     const fetchAndAddRecords = () => {
-        //axios.get(`${process.env.REACT_APP_API_URL}/fetch-devices`, { withCredentials: true })
-        axios.get(`http://localhost:8080/devices/fetch-devices`, { withCredentials: true })
+        axios.get(`${process.env.REACT_APP_API_URL}/fetch-devices`, { withCredentials: true })// To Fetch devices in Database
             .then(() => {
                 console.log("Records successfully added to the database"); // Log success message
                 fetchTablets();  // Fetch updated tablet data after adding records
