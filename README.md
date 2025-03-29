@@ -1,34 +1,25 @@
-# Device Atlas - React + Express + PostgreSQL + Docker
+# Device Atlas - React + Express/Java Spring-Boot + PostgreSQL/MS-SQL + Docker
 
 ## Overview
 This project is a full-stack application using:
 - **Frontend**: React with Bootstrap for UI components
-- **Backend**: Express.js (Node.js framework)
-- **Database**: PostgreSQL
+- **Backend**: Express.js (Node.js framework) OR Java Spring-Boot // Explained in Backend repository
+- **Database**: PostgreSQL OR MS-SQL
 - **Containerization**: Docker (with separate containers for frontend, backend, and database)
 
 ## Prerequisites
 Make sure you have the following installed:
 - **Docker & Docker Compose**
-- **Node.js** (if running locally)
-- **PostgreSQL** (if running locally)
+- **Node.js OR Java**(if running locally)
+- **PostgreSQL OR MS-SQL** (if running locally)
 
 ## Environment Variables
 Create a `.env` file in both frontend and backend directories.
 
 ### Frontend `.env`
 ```
-REACT_APP_API_URL=http://localhost:5000
-```
-
-### Backend `.env`
-```
-PORT=5000
-DB_HOST=db
-DB_PORT=5432
-DB_USER=your_user
-DB_PASSWORD=your_password
-DB_NAME=your_database
+REACT_APP_API_URL=http://192.168.0.15:5000 # For Express.js Backend
+#REACT_APP_API_URL=http://192.168.0.15:8080/devices # For Java Spring-Boot Backend
 ```
 
 ## Docker Setup
@@ -51,17 +42,21 @@ docker-compose down
 - **`GET /fetch-devices`** - Add records to the database
 
 ## Running Locally (Without Docker)
-### Backend
+### Backend - Express.js
 1. Install dependencies: `cd backend && npm install`
 2. Start the server: `npm start`
+
+### Backend - Java Spring-Boot
+1. Install dependencies: `cd backend `
+2. Start the server: `mvn clean install mvn spring-boot:run`
 
 ### Frontend
 1. Install dependencies: `cd frontend && npm install`
 2. Start React: `npm start`
 
-## Database Setup (PostgreSQL)
-- If running locally, ensure PostgreSQL is installed and running.
-- If using Docker, a PostgreSQL container will be created automatically.
+## Database Setup (PostgreSQL/MS-SQL)
+- If running locally, ensure server is installed and running.
+- If using Docker, a DB container container will be created automatically.
 
 ## License
 This project is licensed under the MIT License.
